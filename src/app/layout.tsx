@@ -1,3 +1,4 @@
+import Header from "@/components/header/header";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -17,9 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className="bg-green-500 h-14 flex items-center justify-center">
-          <h1 className="text-white text-2xl font-bold"> GoodVibesHub 🤗 </h1>
-        </div>
+        <Header />
         {children}
       </body>
     </html>
