@@ -13,7 +13,7 @@ import {
   useActiveProfile,
   useFeed,
 } from "@lens-protocol/react-web";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -55,15 +55,15 @@ export default function Feed() {
     }
   }
 
-  const [messagesVibe, setMessagesVibe] = useState<boolean[]>([]);
+  const [postsVibe, setPostsVibe] = useState<boolean[]>([]);
   const [hasChatGPTVerified, setHasChatGPTVerified] = useState<boolean>(false);
 
   useEffect(() => {
-    const verifyMessagesVibe = async (messages: string[]) => {
-      const response = await fetch("/api/openai", {
+    const verifyPostsVibe = async (posts: string[]) => {
+      const response = await fetch("/api/vibe", {
         method: "POST",
         body: JSON.stringify({
-          messages: messages,
+          posts: posts,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export default function Feed() {
       });
       const res = await response.json();
       if (response.ok) {
-        setMessagesVibe(res);
+        setPostsVibe(res);
         setHasChatGPTVerified(true);
       } else {
         console.error("error: ", res.error);
@@ -80,7 +80,7 @@ export default function Feed() {
     };
     if (feedData) {
       console.log(feedData);
-      verifyMessagesVibe(
+      verifyPostsVibe(
         feedData
           .map((post) => post.root.metadata.content)
           .filter((content) => content !== null) as string[]
@@ -89,10 +89,10 @@ export default function Feed() {
   }, [feedData]);
 
   useEffect(() => {
-    if (messagesVibe.length) {
-      console.log({ messagesVibe });
+    if (postsVibe.length) {
+      console.log({ postsVibe });
     }
-  }, [messagesVibe]);
+  }, [postsVibe]);
 
   const feedSkeleton = Array.from({ length: 7 }, (_, index) => (
     <div key={index} className="p-4 space-y-4">
@@ -130,7 +130,7 @@ export default function Feed() {
               <Card
                 className={
                   `${
-                    messagesVibe[index] === false
+                    postsVibe[index] === false
                       ? "blur cursor-pointer"
                       : "pointer-events-none"
                   }` + " break-words"
