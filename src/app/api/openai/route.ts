@@ -23,10 +23,6 @@ Messages:`;
 
   const chatResponse = chatCompletion.choices[0].message.content;
 
-  // mock
-  // const resOA =
-  //   "[true, true, false, false, true, true, true, false, false, false]";
-
   if (!chatResponse) {
     return NextResponse.json(
       { error: "no responses from ChatGPT" },
@@ -58,10 +54,4 @@ Messages:`;
   }
 
   return NextResponse.json(listOfVibesToReturn, { status: 200 });
-
-  // return NextResponse.json([], { status: 200 });
-  // return NextResponse.json(
-  //   { error: "no responses from ChatGPT" },
-  //   { status: 500 }
-  // );
 }
