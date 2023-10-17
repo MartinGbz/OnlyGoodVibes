@@ -4,20 +4,11 @@ import {
   useWalletLogin,
   useWalletLogout,
   useActiveWallet,
-  useFeed,
-  useActiveProfile,
-  useProfilesOwnedByMe,
 } from "@lens-protocol/react-web";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { Button } from "@/components/ui/button";
-
-// import { LensClient, development } from "@lens-protocol/client";
-
-// const lensClient = new LensClient({
-//   environment: development,
-// });
 
 export default function LensLoginButton() {
   // LENS
@@ -46,14 +37,6 @@ export default function LensLoginButton() {
     console.log({ isConnected });
   }, [isConnected]);
 
-  // useEffect(() => {
-  //   if (wallet) {
-  //     onChangeAddress(wallet.address);
-  //   } else {
-  //     onChangeAddress(null);
-  //   }
-  // }, [onChangeAddress, wallet]);
-
   const onLoginClick = async () => {
     if (isConnected) {
       await disconnectAsync();
@@ -70,26 +53,6 @@ export default function LensLoginButton() {
     }
   };
 
-  const { data: profile, error, loading } = useActiveProfile();
-
-  // useEffect(() => {
-  //   console.log({ profile });
-  //   onChangeProfile(profile?.handle ?? null);
-  // }, [onChangeProfile, profile]);
-
-  console.log({ profile });
-
-  // const { data: profiles, error, loading } = useProfilesOwnedByMe();
-
-  // const onLogoutClick = async () => {
-  //   console.log("onLogoutClick");
-  //   console.log({ wallet });
-  //   console.log({ data });
-  //   // console.log({ profiles });
-  //   console.log({ error });
-  //   console.log({ loading });
-  // };
-
   const onLogoutClick = async () => {
     await disconnectAsync();
     await logout();
@@ -97,11 +60,6 @@ export default function LensLoginButton() {
 
   return (
     <div>
-      {/* {isWalletConnected && <p>WAGMI: Logged in </p>}
-      {!isWalletConnected && <p>WAGMI: Not logged in </p>}
-      {wallet && <p>LENS: You are logged-in with {wallet.address}</p>}
-      {!wallet && <p>LENS: You are NOT logged-in</p>}
-      {activeWalletLoading && <p>LENS: Loading...</p>} */}
       <Button
         className="bg-red-200"
         variant="outline"

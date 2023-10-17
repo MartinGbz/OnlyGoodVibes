@@ -7,33 +7,21 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
-let items = [
-  "Item 1",
-  "Item 2",
-  "Item 3",
-  "Item 4",
-  "Item 5",
-  "Item 6",
-  "Item 7",
-  "Item 8",
-  "Item 9",
-  "Item 10",
-];
-
 import { useActiveProfile, useFeed } from "@lens-protocol/react-web";
-import { useEffect } from "react";
+import { use, useEffect, useState } from "react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
 
 export default function Feed() {
-  // console.log("HEEEERE");
-  // console.log({ address });
-
   const { data: profile, error, loading } = useActiveProfile();
 
   useEffect(() => {
     console.log("data AHAHAH: " + profile);
     console.log(profile);
-    // console.log({ error });
-    // console.log({ loading });
   }, [profile, error, loading]);
 
   const {
@@ -52,7 +40,7 @@ export default function Feed() {
     console.log({ hasMore });
   }, [feedData, feedLoading, hasMore]);
 
-  function formatTimeAgo(timestamp) {
+  function formatTimeAgo(timestamp: number) {
     const now = Date.now();
     const differenceInSeconds = Math.floor((now - timestamp) / 1000);
 
@@ -70,37 +58,89 @@ export default function Feed() {
     }
   }
 
+  const [messagesVibe, setMessagesVibe] = useState<boolean[]>([]);
+
+  useEffect(() => {
+    console.log(feedData);
+    const verifyMessagesVibe = async (messages: string[]) => {
+      const response = await fetch("/api/openai", {
+        method: "POST",
+        body: JSON.stringify({
+          // pass the content of all the posts of the feed to the API
+          // and get a response
+          messages: messages,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const res = await response.json();
+      setMessagesVibe(res);
+    };
+    if (feedData) {
+      verifyMessagesVibe(
+        feedData
+          .map((post) => post.root.metadata.content)
+          .filter((content) => content !== null) as string[]
+      );
+    }
+  }, [feedData]);
+
+  useEffect(() => {
+    console.log({ messagesVibe });
+  }, [messagesVibe]);
+
   return (
     <div>
-      {/* <MyProfile /> */}
-      {feedData?.map((post) => (
-        <Card key={post.root.id}>
-          <CardHeader>
-            <div className="flex items-center space-x-2">
-              <Avatar className="w-10 h-10">
-                <AvatarImage
-                  className="rounded-full object-cover w-full h-full"
-                  src={
-                    post.root.profile.picture.original.url ??
-                    "https://github.com/shadcn.png"
-                  }
-                  alt="@shadcn"
-                />
-                <AvatarFallback>
-                  {post.root.profile.name?.substring(0, 2).toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <CardTitle>{post.root.profile.name}</CardTitle>
-            </div>
-            <CardDescription>
-              {"@" +
-                post.root.profile.handle +
-                " · " +
-                formatTimeAgo(Date.parse(post.root.createdAt))}
-            </CardDescription>
-          </CardHeader>
-          <CardContent>{post.root.metadata.content}</CardContent>
-        </Card>
+      {feedData?.map((post, index) => (
+        //className="blur"
+        <TooltipProvider key={post.root.id}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Card
+                className={`${
+                  !messagesVibe[index]
+                    ? "blur cursor-pointer"
+                    : "pointer-events-none"
+                }`}
+                onClick={(event) => {
+                  // console.log("clicked");
+                  // console.log(post.root.id);
+                  // console.log(post.root.metadata.content);
+                  event.currentTarget.classList.remove("blur");
+                }}>
+                <CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Avatar className="w-10 h-10">
+                      <AvatarImage
+                        className="rounded-full object-cover w-full h-full"
+                        src={
+                          post.root.profile.picture.original.url ??
+                          "https://github.com/shadcn.png"
+                        }
+                        alt="@shadcn"
+                      />
+                      <AvatarFallback>
+                        {post.root.profile.name?.substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <CardTitle>{post.root.profile.name}</CardTitle>
+                  </div>
+                  <CardDescription>
+                    {"@" +
+                      post.root.profile.handle +
+                      " · " +
+                      formatTimeAgo(Date.parse(post.root.createdAt))}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>{post.root.metadata.content}</CardContent>
+              </Card>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p> ⬅️ Click to see the bad post</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       ))}
     </div>
   );

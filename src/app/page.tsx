@@ -1,7 +1,6 @@
 "use client";
 
 import Header from "@/components/header/header";
-import { use, useEffect, useState } from "react";
 
 // WAGMI
 
@@ -42,16 +41,6 @@ const lensConfig: LensConfig = {
 import Feed from "@/components/feed/feed";
 
 export default function Home() {
-  const [profileId, setProfileId] = useState<string | null>(null);
-
-  // const { data: activeProfile, error, loading } = useActiveProfile();
-
-  // useEffect(() => {
-  //   console.log({ activeProfile });
-  //   console.log({ error });
-  //   console.log({ loading });
-  // }, [activeProfile, error, loading]);
-
   return (
     <WagmiConfig config={config}>
       <LensProvider config={lensConfig}>
