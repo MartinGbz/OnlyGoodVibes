@@ -12,7 +12,6 @@ import { Button } from "@/components/ui/button";
 
 import Image from "next/image";
 import lensIcon from "@/medias/icons/lens-icon-T-Green.svg";
-import lensIconPNG from "@/medias/icons/Icon-T-Green.png";
 
 export default function LensLoginButton() {
   // LENS
@@ -62,9 +61,6 @@ export default function LensLoginButton() {
 
   return (
     <Button
-      // className="bg-red-200 hover:bg-amber-300 text-lensgreen"
-      // className="bg-red-200 text-lensgreen border-2 border-red-200 hover:bg-greenpink"
-      // className="bg-red-200 text-lensgreen border-2 border-red-200 hover:brightness-105"
       className="h-10"
       variant="defaultlens"
       disabled={isLoginPending || isLogoutPending || activeWalletLoading}

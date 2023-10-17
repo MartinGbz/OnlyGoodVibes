@@ -2,10 +2,8 @@ import { basePrompt, openai } from "@/utils/openai";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request): Promise<NextResponse> {
-  return NextResponse.json({ error: "error" }, { status: 500 });
   const body = await req.json();
   const messages: string[] = body.messages;
-  console.log(messages);
   console.log(messages.length);
 
   const middleprompt = `Your array must contains exactly ${messages.length} elements.
@@ -19,8 +17,6 @@ Messages:`;
     messages: [{ role: "user", content: messageToSend }],
     model: "gpt-3.5-turbo",
   });
-  console.log({ chatCompletion });
-  console.log(chatCompletion.choices);
 
   const chatResponse = chatCompletion.choices[0].message.content;
 
