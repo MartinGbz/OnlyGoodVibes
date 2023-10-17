@@ -87,7 +87,7 @@ export default function Feed() {
     console.log({ messagesVibe });
   }, [messagesVibe]);
 
-  const feedContent = Array.from({ length: 10 }, (_, index) => (
+  const feedSkeleton = Array.from({ length: 10 }, (_, index) => (
     <div key={index} className="p-4 space-y-4">
       <div className="flex items-center space-x-4 w-full">
         <Skeleton className="h-10 w-12 rounded-full bg-gray-300" />
@@ -153,7 +153,7 @@ export default function Feed() {
             </Tooltip>
           </TooltipProvider>
         ))}
-      {!hasChatGPTVerified && feedContent}
+      {!hasChatGPTVerified && feedSkeleton}
     </div>
   );
 }

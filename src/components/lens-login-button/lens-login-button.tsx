@@ -65,15 +65,18 @@ export default function LensLoginButton() {
       variant="defaultlens"
       disabled={isLoginPending || isLogoutPending || activeWalletLoading}
       onClick={isWalletConnected && wallet ? onLogoutClick : onLoginClick}>
-      <Image className="mr-2 h-7 w-7" src={lensIcon} alt={""} />
+      <Image className="md:mr-2 h-7 w-7" src={lensIcon} alt={""} />
       {!(isLoginPending || isLogoutPending || activeWalletLoading) &&
-        wallet &&
-        wallet.address.substring(0, 6) + "... Logout"}
+        wallet && (
+          <p className="hidden md:flex">
+            {wallet.address.substring(0, 6) + "... Logout"}
+          </p>
+        )}
       {!(isLoginPending || isLogoutPending || activeWalletLoading) &&
-        !wallet &&
-        "Login w/ Lens"}
-      {(isLoginPending || isLogoutPending || activeWalletLoading) &&
-        "Loading..."}
+        !wallet && <p className="hidden md:flex">Login w/ Lens</p>}
+      {(isLoginPending || isLogoutPending || activeWalletLoading) && (
+        <p className="hidden md:flex">Loading...</p>
+      )}
     </Button>
   );
 }
