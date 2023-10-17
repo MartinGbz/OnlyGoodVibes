@@ -15,6 +15,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
+import { Skeleton } from "../ui/skeleton";
+
+import "./feed.css";
 
 export default function Feed() {
   const { data: profile, error, loading } = useActiveProfile();
@@ -77,54 +80,71 @@ export default function Feed() {
     console.log({ messagesVibe });
   }, [messagesVibe]);
 
+  const feedContent = Array.from({ length: 10 }, (_, index) => (
+    <div key={index} className="p-4 space-y-4">
+      <div className="flex items-center space-x-4 w-full">
+        <Skeleton className="h-10 w-12 rounded-full bg-gray-300" />
+        <div className="space-y-2 w-full">
+          <Skeleton className="h-4 w-full bg-gray-300" />
+          <Skeleton className="h-4 custom-width bg-gray-300" />
+        </div>
+      </div>
+      <Skeleton className="h-24 w-full bg-gray-300" />
+    </div>
+  ));
+
   return (
     <div>
-      {feedData?.map((post, index) => (
-        <TooltipProvider key={post.root.id}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Card
-                className={`${
-                  messagesVibe[index] === false
-                    ? "blur cursor-pointer"
-                    : "pointer-events-none"
-                }`}
-                onClick={(event) => {
-                  event.currentTarget.classList.remove("blur");
-                }}>
-                <CardHeader>
-                  <div className="flex items-center space-x-2">
-                    <Avatar className="w-10 h-10">
-                      <AvatarImage
-                        className="rounded-full object-cover w-full h-full"
-                        src={
-                          post.root.profile.picture.original.url ??
-                          "https://github.com/shadcn.png"
-                        }
-                        alt="@shadcn"
-                      />
-                      <AvatarFallback>
-                        {post.root.profile.name?.substring(0, 2).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                    <CardTitle>{post.root.profile.name}</CardTitle>
-                  </div>
-                  <CardDescription>
-                    {"@" +
-                      post.root.profile.handle +
-                      " · " +
-                      formatTimeAgo(Date.parse(post.root.createdAt))}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>{post.root.metadata.content}</CardContent>
-              </Card>
-            </TooltipTrigger>
-            <TooltipContent side="right">
-              <p> ⬅️ Click to see the bad post</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-      ))}
+      {messagesVibe &&
+        feedData?.map((post, index) => (
+          <TooltipProvider key={post.root.id}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Card
+                  className={`${
+                    messagesVibe[index] === false
+                      ? "blur cursor-pointer"
+                      : "pointer-events-none"
+                  }`}
+                  onClick={(event) => {
+                    event.currentTarget.classList.remove("blur");
+                  }}>
+                  <CardHeader>
+                    <div className="flex items-center space-x-2">
+                      <Avatar className="w-10 h-10">
+                        <AvatarImage
+                          className="rounded-full object-cover w-full h-full"
+                          src={
+                            post.root.profile.picture.original.url ??
+                            "https://github.com/shadcn.png"
+                          }
+                          alt="@shadcn"
+                        />
+                        <AvatarFallback>
+                          {post.root.profile.name
+                            ?.substring(0, 2)
+                            .toUpperCase()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <CardTitle>{post.root.profile.name}</CardTitle>
+                    </div>
+                    <CardDescription>
+                      {"@" +
+                        post.root.profile.handle +
+                        " · " +
+                        formatTimeAgo(Date.parse(post.root.createdAt))}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>{post.root.metadata.content}</CardContent>
+                </Card>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <p> ⬅️ Click to see the bad post</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        ))}
+      {messagesVibe.length == 0 && feedContent}
     </div>
   );
 }
