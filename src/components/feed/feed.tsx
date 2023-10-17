@@ -51,6 +51,7 @@ export default function Feed() {
   }
 
   const [messagesVibe, setMessagesVibe] = useState<boolean[]>([]);
+  const [hasChatGPTVerified, setHasChatGPTVerified] = useState<boolean>(false);
 
   useEffect(() => {
     console.log(feedData);
@@ -65,7 +66,13 @@ export default function Feed() {
         },
       });
       const res = await response.json();
-      setMessagesVibe(res);
+      if (response.ok) {
+        setMessagesVibe(res);
+        setHasChatGPTVerified(true);
+      } else {
+        console.error("error: ", res.error);
+        setHasChatGPTVerified(true);
+      }
     };
     if (feedData) {
       verifyMessagesVibe(
@@ -95,7 +102,7 @@ export default function Feed() {
 
   return (
     <div>
-      {messagesVibe &&
+      {hasChatGPTVerified &&
         feedData?.map((post, index) => (
           <TooltipProvider key={post.root.id}>
             <Tooltip>
@@ -144,7 +151,7 @@ export default function Feed() {
             </Tooltip>
           </TooltipProvider>
         ))}
-      {messagesVibe.length == 0 && feedContent}
+      {!hasChatGPTVerified && feedContent}
     </div>
   );
 }
