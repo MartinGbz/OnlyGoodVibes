@@ -34,7 +34,6 @@ export default function LensLoginButton() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   useEffect(() => {
     setIsWalletConnected(isConnected);
-    console.log({ isConnected });
   }, [isConnected]);
 
   const onLoginClick = async () => {
@@ -46,7 +45,6 @@ export default function LensLoginButton() {
 
     if (connector instanceof InjectedConnector) {
       const walletClient = await connector.getWalletClient();
-      console.log({ walletClient });
       await login({
         address: walletClient.account.address,
       });

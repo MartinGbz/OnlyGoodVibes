@@ -19,11 +19,6 @@ import {
 export default function Feed() {
   const { data: profile, error, loading } = useActiveProfile();
 
-  useEffect(() => {
-    console.log("data AHAHAH: " + profile);
-    console.log(profile);
-  }, [profile, error, loading]);
-
   const {
     data: feedData,
     loading: feedLoading,
@@ -33,12 +28,6 @@ export default function Feed() {
     profileId: profile?.id || "0x0",
     limit: 10,
   });
-
-  useEffect(() => {
-    console.log({ feedData });
-    console.log({ feedLoading });
-    console.log({ hasMore });
-  }, [feedData, feedLoading, hasMore]);
 
   function formatTimeAgo(timestamp: number) {
     const now = Date.now();
@@ -66,8 +55,6 @@ export default function Feed() {
       const response = await fetch("/api/openai", {
         method: "POST",
         body: JSON.stringify({
-          // pass the content of all the posts of the feed to the API
-          // and get a response
           messages: messages,
         }),
         headers: {
@@ -93,7 +80,6 @@ export default function Feed() {
   return (
     <div>
       {feedData?.map((post, index) => (
-        //className="blur"
         <TooltipProvider key={post.root.id}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -104,9 +90,6 @@ export default function Feed() {
                     : "pointer-events-none"
                 }`}
                 onClick={(event) => {
-                  // console.log("clicked");
-                  // console.log(post.root.id);
-                  // console.log(post.root.metadata.content);
                   event.currentTarget.classList.remove("blur");
                 }}>
                 <CardHeader>

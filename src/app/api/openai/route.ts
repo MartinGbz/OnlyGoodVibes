@@ -1,15 +1,6 @@
 import { basePrompt, openai } from "@/utils/openai";
 import { NextResponse } from "next/server";
 
-export async function GET(): Promise<NextResponse> {
-  const chatCompletion = await openai.chat.completions.create({
-    messages: [{ role: "user", content: "Say this is a test" }],
-    model: "gpt-3.5-turbo",
-  });
-  console.log({ chatCompletion });
-  return NextResponse.json(chatCompletion, { status: 200 });
-}
-
 export async function POST(req: Request): Promise<NextResponse> {
   const body = await req.json();
   const messages: string[] = body.messages;

@@ -53,7 +53,7 @@ export default function Home() {
                 fontSize: "150px",
               }}>
               {" "}
-              🍀{" "}
+              ✨{" "}
             </div>
             <div className="basis-2/4 overflow-scroll	space-y-2">
               <Feed />
@@ -64,7 +64,7 @@ export default function Home() {
                 fontSize: "150px",
               }}>
               {" "}
-              🍀{" "}
+              💫{" "}
             </div>
           </main>
         </div>
