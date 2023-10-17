@@ -2,15 +2,19 @@
 
 ## The "bad news-free" social network
 
-This project is an **MVP** of a Social network that eliminates all the bad news from your [Lens Protocol](https://www.lens.xyz/) feed.
+This project is an **MVP** of a social network that eliminates all the bad news from your [Lens Protocol](https://www.lens.xyz/) feed.
 
-When you connect your wallet, OnlyGoodVibes will fetch your default feed (already created through Lens API). Then it will ask chat GPT to send a feedback of each post (true => good news, false => bad news).
+When you connect your wallet, OnlyGoodVibes will fetch your default Lens feed (already created by the Lens API). Then it will ask ChatGPT to send a feedback for each post (true => good news, false => bad news).
 
-All messages considered like "bad news" or "neutral news"(1) are blurred out on the UI.
+All messages considered like "bad news" or "neutral news"(1) are then blurred out on the UI.
 
 You'll never be in a bad mood on the social networks again 😋
 
 > (1) : As OnlyGooVibes is an MVP, the aim is to showcase the concept. By including neutral news I multiply my chances of there being blurred content in the feed, allowing everyone to see how it works.
+
+<br/>
+
+<img src="src/medias/architecture/architecture.png"/>
 
 ## Project Usage
 
