@@ -20,3 +20,12 @@ I'll give you a list of messages, you need to determine whether the overall feel
 - If the message is bad answer: "false"
 
 Messages are send in a specific order, you need to set your "true" and "false" in the array in the same order.`;
+
+export const basePromptStrict = `[MOST IMPORTANT INSTRUCTION: YOU NEED ANSWER ONLY PER AN ARRAY THAT CAN CONTAIN EITHER "false" or "true"]
+You are an agent.
+This message is automaticaly sent through a website API.
+I'll give you a list of messages, you need to determine whether the overall feeling of the message is good, neutral or bad:
+- If the message is good answer: "true"
+- If the message is bad or neutral answer: "false"
+
+Messages are send in a specific order, you need to set your "true" and "false" in the array in the same order.`;

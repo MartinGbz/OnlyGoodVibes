@@ -87,7 +87,7 @@ export default function Feed() {
     console.log({ messagesVibe });
   }, [messagesVibe]);
 
-  const feedSkeleton = Array.from({ length: 10 }, (_, index) => (
+  const feedSkeleton = Array.from({ length: 7 }, (_, index) => (
     <div key={index} className="p-4 space-y-4">
       <div className="flex items-center space-x-4 w-full">
         <Skeleton className="h-10 w-12 rounded-full bg-gray-300" />
@@ -100,60 +100,69 @@ export default function Feed() {
     </div>
   ));
 
+  useEffect(() => {
+    console.log({ profile });
+    setHasChatGPTVerified(false);
+  }, [profile]);
+
   return (
-    <div>
-      {hasChatGPTVerified &&
-        feedData?.map((post, index) => (
-          <TooltipProvider key={post.root.id}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Card
-                  className={
-                    `${
-                      messagesVibe[index] === false
-                        ? "blur cursor-pointer"
-                        : "pointer-events-none"
-                    }` + " break-words"
-                  }
-                  onClick={(event) => {
-                    event.currentTarget.classList.remove("blur");
-                  }}>
-                  <CardHeader>
-                    <div className="flex items-center space-x-2">
-                      <Avatar className="w-10 h-10">
-                        <AvatarImage
-                          className="rounded-full object-cover w-full h-full"
-                          src={
-                            post.root.profile.picture.original.url ??
-                            "https://github.com/shadcn.png"
-                          }
-                          alt="@shadcn"
-                        />
-                        <AvatarFallback>
-                          {post.root.profile.name
-                            ?.substring(0, 2)
-                            .toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <CardTitle>{post.root.profile.name}</CardTitle>
-                    </div>
-                    <CardDescription>
-                      {"@" +
-                        post.root.profile.handle +
-                        " · " +
-                        formatTimeAgo(Date.parse(post.root.createdAt))}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>{post.root.metadata.content}</CardContent>
-                </Card>
-              </TooltipTrigger>
-              <TooltipContent side="right">
-                <p> ⬅️ Click to see the bad post</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        ))}
-      {!hasChatGPTVerified && feedSkeleton}
-    </div>
+    // <div>
+    (profile &&
+      hasChatGPTVerified &&
+      feedData?.map((post, index) => (
+        <TooltipProvider key={post.root.id}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Card
+                className={
+                  `${
+                    messagesVibe[index] === false
+                      ? "blur cursor-pointer"
+                      : "pointer-events-none"
+                  }` + " break-words"
+                }
+                onClick={(event) => {
+                  event.currentTarget.classList.remove("blur");
+                }}>
+                <CardHeader>
+                  <div className="flex items-center space-x-2">
+                    <Avatar className="w-10 h-10">
+                      <AvatarImage
+                        className="rounded-full object-cover w-full h-full"
+                        src={
+                          post.root.profile.picture.original.url ??
+                          "https://github.com/shadcn.png"
+                        }
+                        alt={post.root.profile.name ?? "unknown"}
+                      />
+                      <AvatarFallback>
+                        {post.root.profile.name?.substring(0, 2).toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                    <CardTitle>{post.root.profile.name}</CardTitle>
+                  </div>
+                  <CardDescription>
+                    {"@" +
+                      post.root.profile.handle +
+                      " · " +
+                      formatTimeAgo(Date.parse(post.root.createdAt))}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>{post.root.metadata.content}</CardContent>
+              </Card>
+            </TooltipTrigger>
+            <TooltipContent side="right">
+              <p> ⬅️ Click to see the bad/neutral post</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      ))) ||
+    (profile && !hasChatGPTVerified && feedSkeleton) ||
+    (!profile && (
+      <div className="h-full flex justify-center content-center items-center text-[20px] md:text-[40px] text-gray-400 font-semibold	">
+        {" "}
+        Login to see your feed{" "}
+      </div>
+    ))
   );
 }

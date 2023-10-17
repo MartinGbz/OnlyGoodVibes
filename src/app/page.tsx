@@ -51,7 +51,7 @@ export default function Home() {
               {" "}
               ✨{" "}
             </div>
-            <div className="basis-4/4 md:basis-2/4 overflow-scroll space-y-2">
+            <div className="basis-4/4 md:basis-2/4 overflow-scroll md:space-y-2 h-full w-full">
               <Feed />
             </div>
             <div className="basis-0/4 md:basis-1/4 flex justify-center content-end items-end hidden md:flex text-[150px]">
