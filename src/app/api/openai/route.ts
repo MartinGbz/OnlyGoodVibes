@@ -2,6 +2,7 @@ import { basePrompt, openai } from "@/utils/openai";
 import { NextResponse } from "next/server";
 
 export async function POST(req: Request): Promise<NextResponse> {
+  return NextResponse.json({ error: "error" }, { status: 500 });
   const body = await req.json();
   const messages: string[] = body.messages;
   console.log(messages);

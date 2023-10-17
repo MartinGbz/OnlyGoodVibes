@@ -108,11 +108,13 @@ export default function Feed() {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Card
-                  className={`${
-                    messagesVibe[index] === false
-                      ? "blur cursor-pointer"
-                      : "pointer-events-none"
-                  }`}
+                  className={
+                    `${
+                      messagesVibe[index] === false
+                        ? "blur cursor-pointer"
+                        : "pointer-events-none"
+                    }` + " break-words"
+                  }
                   onClick={(event) => {
                     event.currentTarget.classList.remove("blur");
                   }}>

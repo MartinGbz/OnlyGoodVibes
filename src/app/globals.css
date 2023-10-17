@@ -74,3 +74,17 @@
     @apply bg-slate-100 text-foreground;
   }
 }
+
+@font-face {
+  font-family: "Pacifico-Regular";
+  src: url(../fonts/Pacifico-Regular.ttf);
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Satisfy-Regular";
+  src: url(../fonts/Satisfy-Regular.ttf);
+  font-weight: normal;
+  font-style: normal;
+}

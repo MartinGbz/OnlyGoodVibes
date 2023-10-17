@@ -10,6 +10,10 @@ import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { Button } from "@/components/ui/button";
 
+import Image from "next/image";
+import lensIcon from "@/medias/icons/lens-icon-T-Green.svg";
+import lensIconPNG from "@/medias/icons/Icon-T-Green.png";
+
 export default function LensLoginButton() {
   // LENS
   const {
@@ -57,21 +61,23 @@ export default function LensLoginButton() {
   };
 
   return (
-    <div>
-      <Button
-        className="bg-red-200"
-        variant="outline"
-        disabled={isLoginPending || isLogoutPending}
-        onClick={isWalletConnected && wallet ? onLogoutClick : onLoginClick}>
-        {!(isLoginPending || isLogoutPending || activeWalletLoading) &&
-          wallet &&
-          wallet.address.substring(0, 5) + "... Logout"}
-        {!(isLoginPending || isLogoutPending || activeWalletLoading) &&
-          !wallet &&
-          "Login w/ Lens"}
-        {(isLoginPending || isLogoutPending || activeWalletLoading) &&
-          "Loading..."}
-      </Button>
-    </div>
+    <Button
+      // className="bg-red-200 hover:bg-amber-300 text-lensgreen"
+      // className="bg-red-200 text-lensgreen border-2 border-red-200 hover:bg-greenpink"
+      // className="bg-red-200 text-lensgreen border-2 border-red-200 hover:brightness-105"
+      className="h-10"
+      variant="defaultlens"
+      disabled={isLoginPending || isLogoutPending || activeWalletLoading}
+      onClick={isWalletConnected && wallet ? onLogoutClick : onLoginClick}>
+      <Image className="mr-2 h-7 w-7" src={lensIcon} alt={""} />
+      {!(isLoginPending || isLogoutPending || activeWalletLoading) &&
+        wallet &&
+        wallet.address.substring(0, 6) + "... Logout"}
+      {!(isLoginPending || isLogoutPending || activeWalletLoading) &&
+        !wallet &&
+        "Login w/ Lens"}
+      {(isLoginPending || isLogoutPending || activeWalletLoading) &&
+        "Loading..."}
+    </Button>
   );
 }
