@@ -29,14 +29,8 @@ async function getVibeOfPosts(posts: string[]): Promise<boolean[]> {
 
   const chatResponse = chatCompletion.choices[0].message.content;
 
-  // const chatResponse = null;
-
   if (!chatResponse) {
     throw new Error("No feeback from ChatGPT");
-    // return NextResponse.json(
-    //   { error: "no responses from ChatGPT" },
-    //   { status: 500 }
-    // );
   }
 
   let listOfVibes: boolean[];
@@ -44,18 +38,10 @@ async function getVibeOfPosts(posts: string[]): Promise<boolean[]> {
     listOfVibes = processChatResponse(chatResponse);
   } catch (e) {
     throw new Error("Error while parsing responses from ChatGPT");
-    // return NextResponse.json(
-    //   { error: "error parsing responses from ChatGPT" },
-    //   { status: 500 }
-    // );
   }
 
   if (!listOfVibes) {
     throw new Error("Error while parsing responses from ChatGPT");
-    // return NextResponse.json(
-    //   { error: "no responses from ChatGPT" },
-    //   { status: 500 }
-    // );
   }
   return listOfVibes;
 }
