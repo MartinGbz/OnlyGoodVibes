@@ -7,7 +7,12 @@ import {
 } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
-import { useActiveProfile, useFeed } from "@lens-protocol/react-web";
+import {
+  Profile,
+  ProfileId,
+  useActiveProfile,
+  useFeed,
+} from "@lens-protocol/react-web";
 import { use, useEffect, useState } from "react";
 import {
   Tooltip,
@@ -28,7 +33,7 @@ export default function Feed() {
     hasMore,
     next,
   } = useFeed({
-    profileId: profile?.id || "0x0",
+    profileId: profile?.id as ProfileId,
     limit: 10,
   });
 
@@ -54,7 +59,6 @@ export default function Feed() {
   const [hasChatGPTVerified, setHasChatGPTVerified] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log(feedData);
     const verifyMessagesVibe = async (messages: string[]) => {
       const response = await fetch("/api/openai", {
         method: "POST",
@@ -75,6 +79,7 @@ export default function Feed() {
       }
     };
     if (feedData) {
+      console.log(feedData);
       verifyMessagesVibe(
         feedData
           .map((post) => post.root.metadata.content)
@@ -84,7 +89,9 @@ export default function Feed() {
   }, [feedData]);
 
   useEffect(() => {
-    console.log({ messagesVibe });
+    if (messagesVibe.length) {
+      console.log({ messagesVibe });
+    }
   }, [messagesVibe]);
 
   const feedSkeleton = Array.from({ length: 7 }, (_, index) => (
@@ -101,9 +108,16 @@ export default function Feed() {
   ));
 
   useEffect(() => {
-    console.log({ profile });
     setHasChatGPTVerified(false);
   }, [profile]);
+
+  function getProfilePictureUrl(profile: Profile) {
+    if (profile.picture && "original" in profile.picture) {
+      return profile.picture?.original.url;
+    } else {
+      return "https://github.com/shadcn.png";
+    }
+  }
 
   return (
     // <div>
@@ -129,10 +143,7 @@ export default function Feed() {
                     <Avatar className="w-10 h-10">
                       <AvatarImage
                         className="rounded-full object-cover w-full h-full"
-                        src={
-                          post.root.profile.picture.original.url ??
-                          "https://github.com/shadcn.png"
-                        }
+                        src={getProfilePictureUrl(post.root.profile)}
                         alt={post.root.profile.name ?? "unknown"}
                       />
                       <AvatarFallback>
@@ -152,7 +163,7 @@ export default function Feed() {
               </Card>
             </TooltipTrigger>
             <TooltipContent side="right">
-              <p> ⬅️ Click to see the bad/neutral post</p>
+              <p> ⬅️ Click to see the bad post</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

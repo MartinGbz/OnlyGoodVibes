@@ -7,7 +7,7 @@ export async function POST(req: Request): Promise<NextResponse> {
   console.log(messages.length);
 
   const middleprompt = `Your array must contains exactly ${messages.length} elements.
-Messages:`;
+  Messages:`;
 
   const messageToSend =
     basePrompt + "\n" + middleprompt + "\n\n" + messages.join("\n-");
@@ -27,14 +27,9 @@ Messages:`;
     );
   }
 
-  let listOfVibes: string[];
-  let listOfVibesToReturn: boolean[];
-
+  let listOfVibes: boolean[];
   try {
-    listOfVibes = chatResponse.slice(1, -1).split(", ");
-    listOfVibesToReturn = listOfVibes.map((x) => x === "true");
-    console.log(listOfVibes);
-    console.log(listOfVibesToReturn);
+    listOfVibes = processChatResponse(chatResponse);
   } catch (e) {
     console.log(e);
     return NextResponse.json(
@@ -43,12 +38,23 @@ Messages:`;
     );
   }
 
-  if (!listOfVibesToReturn) {
+  if (!listOfVibes) {
     return NextResponse.json(
       { error: "no responses from ChatGPT" },
       { status: 500 }
     );
   }
 
-  return NextResponse.json(listOfVibesToReturn, { status: 200 });
+  return NextResponse.json(listOfVibes, { status: 200 });
+}
+
+function processChatResponse(chatResponse: string): boolean[] {
+  const listOfVibes: string[] = chatResponse.slice(1, -1).split(", ");
+  const listOfVibesToReturn: boolean[] = listOfVibes.map(
+    (x) => x === "true" || x === '"true"'
+  );
+  console.log(chatResponse);
+  console.log(listOfVibes);
+  console.log(listOfVibesToReturn);
+  return listOfVibesToReturn;
 }
