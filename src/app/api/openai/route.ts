@@ -7,28 +7,37 @@ export async function POST(req: Request): Promise<NextResponse> {
   console.log(messages);
   console.log(messages.length);
 
-  // const messageToSend = basePrompt + "\n\n" + body.message;
+  const middleprompt = `Your array must contains exactly ${messages.length} elements.
+Messages:`;
 
-  // create a message that takes the basePrompt and adds the all the messages from the body to it as a list
-  const messageToSend = basePrompt + "\n\n" + messages.join("\n-");
+  const messageToSend =
+    basePrompt + "\n" + middleprompt + "\n\n" + messages.join("\n-");
   console.log(messageToSend);
 
-  // const chatCompletion = await openai.chat.completions.create({
-  //   messages: [{ role: "user", content: messageToSend }],
-  //   model: "gpt-3.5-turbo",
-  // });
-  // console.log({ chatCompletion });
-  // console.log(chatCompletion.choices);
-  // return NextResponse.json({ chatCompletion }, { status: 200 });
+  const chatCompletion = await openai.chat.completions.create({
+    messages: [{ role: "user", content: messageToSend }],
+    model: "gpt-3.5-turbo",
+  });
+  console.log({ chatCompletion });
+  console.log(chatCompletion.choices);
 
-  const resOA =
-    "[true, true, false, false, true, true, true, false, false, false]";
+  const chatResponse = chatCompletion.choices[0].message.content;
+
+  // mock
+  // const resOA =
+  //   "[true, true, false, false, true, true, true, false, false, false]";
+
   // convert the response from openai to a list of booleans
-  const resOAList: string[] = resOA.slice(1, -1).split(", ");
-  // convert the list of string to a list of boolean
-  const resOAListBool: boolean[] = resOAList.map((x) => x === "true");
-  console.log(resOAList);
-  console.log(resOAListBool);
+  if (!chatResponse) {
+    return NextResponse.json(
+      { error: "no responses from ChatGPT" },
+      { status: 500 }
+    );
+  }
+  const listOfVibes: string[] = chatResponse.slice(1, -1).split(", ");
+  const listOfVibesToReturn: boolean[] = listOfVibes.map((x) => x === "true");
+  console.log(listOfVibes);
+  console.log(listOfVibesToReturn);
 
-  return NextResponse.json(resOAListBool, { status: 200 });
+  return NextResponse.json(listOfVibesToReturn, { status: 200 });
 }

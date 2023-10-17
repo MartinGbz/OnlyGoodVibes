@@ -85,7 +85,7 @@ export default function Feed() {
             <TooltipTrigger asChild>
               <Card
                 className={`${
-                  !messagesVibe[index]
+                  messagesVibe[index] === false
                     ? "blur cursor-pointer"
                     : "pointer-events-none"
                 }`}
